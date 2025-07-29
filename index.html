@@ -1,44 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiffany Sun</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500;1,6..96,600;1,6..96,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>Tiffany Sun</title>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">Tiffany Sun</a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">about</a></li>
-                <li><a href="projects/index.html">projects</a></li>
-                <li><a href="study/index.html">study</a></li>
-                <li><a href="art/index.html">art</a></li>
-                <li><a href="blog/index.html">blog</a></li>
-            </ul>
-        </div>
-    </nav>
-    
-    <!-- Main Content -->
-    <div class="container">
-        <div class="intro-text">hello world, i'm tiffany sun</div>
-        
-        <div class="about-me">
-            <h2>about me</h2>
-            <p>i'm currently a software engineer at <a href="https://www.atlassian.com/">Atlassian</a> and a recent graduate of the University of California, Berkeley, where i studied computer science.</p>
-        </div>
-    </div>
+  <!-- hero panel -->
+  <section id="hero" class="panel hero">
+    <div class="intro-text">hello world, i'm tiffany sun</div>
+    <a href="#about" class="scroll-down" aria-label="scroll down">↓</a>
+  </section>
+
+  <!-- nav (floats in once hero is gone) -->
+  <nav class="nav-links">
+    <a href="#projects">projects</a>
+    <a href="#art">art</a>
+    <a href="#blog">blog</a>
+  </nav>
+
+  <!-- main panels -->
+  <main>
+    <section id="about"  class="panel content-section about-me">
+      <h2>about me</h2>
+      <p>i'm currently a software engineer at <a href="https://www.atlassian.com/">Atlassian</a> and a recent graduate of UC Berkeley, where i studied computer science.</p>
+    </section>
+
+    <section id="projects" class="panel content-section">
+      <h2>projects</h2>
+      <p>Coming soon...</p>
+    </section>
+
+    <section id="art" class="panel content-section">
+      <h2>art</h2>
+      <p>Coming soon...</p>
+    </section>
+
+    <section id="blog" class="panel content-section">
+      <h2>blog</h2>
+      <p>Coming soon...</p>
+    </section>
+  </main>
+
+  <script>
+    /* shrink / re-dock elements once hero leaves the viewport */
+    const hero      = document.getElementById('hero');
+    const nav       = document.querySelector('.nav-links');
+    const introText = document.querySelector('.intro-text');
+
+    const observer = new IntersectionObserver(([entry]) => {
+      document.body.classList.toggle('scrolled', !entry.isIntersecting);
+    }, {threshold: 0.4});
+
+    observer.observe(hero);
+
+    /* smooth in-page links */
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        target?.scrollIntoView({behavior: 'smooth'});
+      });
+    });
+  </script>
 </body>
 </html>
-
-
- 
