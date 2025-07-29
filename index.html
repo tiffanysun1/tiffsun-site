@@ -10,6 +10,9 @@
   <title>Tiffany Sun</title>
 </head>
 <body>
+  <!-- header background for scrolled state -->
+  <div class="header-bg"></div>
+  
   <!-- hero -->
   <section id="hero" class="panel hero">
     <div class="intro-text">hello world, i'm tiffany sun</div>
@@ -27,20 +30,93 @@
   <main>
     <section id="about"    class="panel content-section about-me">
       <h2>about me</h2>
-      <p>i'm currently a software engineer at <a href="https://www.atlassian.com/">atlassian</a> and a recent graduate of uc berkeley, where i studied computer science.</p>
+      <p>hi! i recently graduated uc berkeley with a computer science degree, now working as a software engineer at <a href="https://www.atlassian.com/">atlassian</a>.</p>
+      <p>connect with me:</p>
+      <li>
+        <a href="https://linkedin.com/in/tiffanysun17" target="_blank" rel="noopener noreferrer">linkedin</a>
+      </li>
+      <li>
+        <a href="https://github.com/tiffanysun1" target="_blank" rel="noopener noreferrer">github</a>
+      </li>
+      <li>
+        <a href="https://twitter.com/tiffnami" target="_blank" rel="noopener noreferrer">twitter</a>
+      </li>
     </section>
 
     <section id="projects" class="panel content-section">
-      <h2>projects</h2><p>Coming soon…</p>
+      <h2>projects</h2>
+      <br>
+      <h3>chibify</h3>
+      <p>an app that converts your photo into your chibi version</p>
+      <div class="embeds-container">
+          <!-- Twitter/X Embed -->
+          <div class="embed-item">
+            <div class="twitter-wrapper">
+              <blockquote class="twitter-tweet">
+                <p lang="en" dir="ltr"><a href="https://twitter.com/tiffnami/status/1808036557598908688?ref_src=twsrc%5Etfw">June 29, 2024</a></p>&mdash; tiffany (@tiffnami) <a href="https://twitter.com/tiffnami/status/1808036557598908688?ref_src=twsrc%5Etfw">June 29, 2024</a>
+              </blockquote>
+            </div>
+          </div>
+      </div>
+      <br>
+      <h3>aiart</h3>
+        <p>a space to train art styles and generate art</p>
+        <div class="embeds-container">
+        <div class="embed-item">
+            <div class="embed-wrapper">
+                <iframe src="https://www.loom.com/embed/dbb2dbe3f81d4554a2acba00266c9531?sid=255d6d3d-605d-4f61-9c3c-609b86c92e63" 
+                frameborder="0" 
+                webkitallowfullscreen 
+                mozallowfullscreen 
+                allowfullscreen>
+                </iframe>   
+            </div>
+        </div>
+        </div>
+        <br>
+        <h3>autochapter</h3>
+        <p>automatically chapter lecture videos, generate chapter summaries, and search for specific chapters</p>
+        <div class="embeds-container">
+            <div class="embed-item">
+                <div class="embed-wrapper">
+                    <img src="autochapter.png" alt="Autochapter project screenshot" style="width:100%; height:100%; object-fit:contain; position:absolute;">
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="art"      class="panel content-section">
-      <h2>art</h2><p>Coming soon…</p>
+        <h2>art</h2>
+        <p>some of my art</p>
+      <div class="art-gallery">
+        <div class="art-item">
+          <div class="art-wrapper">
+            <img src="honey.jpg" alt="Honey artwork" class="protected-image">
+            <div class="image-overlay"></div>
+          </div>
+          <p class="art-title">honey</p>
+        </div>
+        <!-- <div class="art-item">
+          <div class="art-wrapper">
+            <img src="ice-cream.jpg" alt="Ice cream artwork" class="protected-image">
+            <div class="image-overlay"></div>
+          </div>
+          <p class="art-title">ice cream</p>
+        </div> -->
+        <div class="art-item">
+          <div class="art-wrapper">
+            <img src="traffic.jpg" alt="Traffic artwork" class="protected-image">
+            <div class="image-overlay"></div>
+          </div>
+          <p class="art-title">traffic</p>
+        </div>
+      </div>
     </section>
 
     <section id="blog"     class="panel content-section">
       <h2>blog</h2><p>Coming soon…</p>
     </section>
+    <br>
   </main>
 
   <script>
@@ -48,11 +124,11 @@
     const hero = document.getElementById('hero');
     const observer = new IntersectionObserver(([e]) =>
       document.body.classList.toggle('scrolled', !e.isIntersecting),
-      {threshold: 1.0}
+      {threshold: 1}
     );
     observer.observe(hero);
 
-    /* smooth in-page links */
+    /* smooth scrolling only for anchor links (starting with #) */
     document.querySelectorAll('a[href^="#"]').forEach(a =>
       a.addEventListener('click', e => {
         e.preventDefault();
@@ -60,6 +136,23 @@
                 .scrollIntoView({behavior:'smooth'});
       })
     );
+
+    /* manually trigger twitter widget loading after page loads */
+    window.addEventListener('load', () => {
+      if (window.twttr && window.twttr.widgets) {
+        window.twttr.widgets.load();
+      }
+    });
+
+    /* disable right-click and other context menus on art images */
+    document.querySelectorAll('.art-wrapper').forEach(wrapper => {
+      wrapper.addEventListener('contextmenu', e => e.preventDefault());
+      wrapper.addEventListener('dragstart', e => e.preventDefault());
+      wrapper.addEventListener('selectstart', e => e.preventDefault());
+    });
   </script>
+  
+  <!-- Twitter widgets script -->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
