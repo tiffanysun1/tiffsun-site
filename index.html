@@ -10,62 +10,56 @@
   <title>Tiffany Sun</title>
 </head>
 <body>
-  <!-- hero panel -->
+  <!-- hero -->
   <section id="hero" class="panel hero">
     <div class="intro-text">hello world, i'm tiffany sun</div>
     <a href="#about" class="scroll-down" aria-label="scroll down">↓</a>
   </section>
 
-  <!-- nav (floats in once hero is gone) -->
+  <!-- nav -->
   <nav class="nav-links">
+    <a href="#about">about</a>
     <a href="#projects">projects</a>
     <a href="#art">art</a>
     <a href="#blog">blog</a>
   </nav>
 
-  <!-- main panels -->
   <main>
-    <section id="about"  class="panel content-section about-me">
+    <section id="about"    class="panel content-section about-me">
       <h2>about me</h2>
-      <p>i'm currently a software engineer at <a href="https://www.atlassian.com/">Atlassian</a> and a recent graduate of UC Berkeley, where i studied computer science.</p>
+      <p>i'm currently a software engineer at <a href="https://www.atlassian.com/">atlassian</a> and a recent graduate of uc berkeley, where i studied computer science.</p>
     </section>
 
     <section id="projects" class="panel content-section">
-      <h2>projects</h2>
-      <p>Coming soon...</p>
+      <h2>projects</h2><p>Coming soon…</p>
     </section>
 
-    <section id="art" class="panel content-section">
-      <h2>art</h2>
-      <p>Coming soon...</p>
+    <section id="art"      class="panel content-section">
+      <h2>art</h2><p>Coming soon…</p>
     </section>
 
-    <section id="blog" class="panel content-section">
-      <h2>blog</h2>
-      <p>Coming soon...</p>
+    <section id="blog"     class="panel content-section">
+      <h2>blog</h2><p>Coming soon…</p>
     </section>
   </main>
 
   <script>
-    /* shrink / re-dock elements once hero leaves the viewport */
-    const hero      = document.getElementById('hero');
-    const nav       = document.querySelector('.nav-links');
-    const introText = document.querySelector('.intro-text');
-
-    const observer = new IntersectionObserver(([entry]) => {
-      document.body.classList.toggle('scrolled', !entry.isIntersecting);
-    }, {threshold: 0.4});
-
+    /* toggle state once hero leaves viewport */
+    const hero = document.getElementById('hero');
+    const observer = new IntersectionObserver(([e]) =>
+      document.body.classList.toggle('scrolled', !e.isIntersecting),
+      {threshold: 1.0}
+    );
     observer.observe(hero);
 
     /* smooth in-page links */
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', e => {
+    document.querySelectorAll('a[href^="#"]').forEach(a =>
+      a.addEventListener('click', e => {
         e.preventDefault();
-        const target = document.querySelector(link.getAttribute('href'));
-        target?.scrollIntoView({behavior: 'smooth'});
-      });
-    });
+        document.querySelector(a.getAttribute('href'))
+                .scrollIntoView({behavior:'smooth'});
+      })
+    );
   </script>
 </body>
 </html>
