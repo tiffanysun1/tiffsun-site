@@ -1,0 +1,15 @@
+{
+  "name": "tiffany-sun-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Tiffany Sun's personal portfolio website built with Astro",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.12.8"
+  }
+}
