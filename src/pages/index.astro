@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Tiffany Sun">
+  <!-- hero -->
+  <section id="hero" class="panel hero">
+    <div class="intro-text"><a href="/" style="text-decoration: none; color: inherit;">hello world, i'm tiffany sun</a></div>
+    <a href="#about" class="scroll-down" aria-label="scroll down">↓</a>
+  </section>
+
+  <main style="padding: 0 2rem;">
+
+    <section class="panel content-section blog-preview">
+      <h2>latest blog post</h2>
+      <div class="blog-preview-content">
+        <h3><a href="/blog" style="text-decoration: none; color: inherit;">AI Code Review Benchmark</a></h3>
+        <div class="blog-date">August 3, 2025</div>
+        <p>I built a lightweight benchmark to test 5 major AI models on real pull request decisions from major open-source projects like Kubernetes and VS Code. Most models turned out to be "Yes Men" - approving 80-90% of PRs including problematic ones.</p>
+        <a href="/blog" class="read-more">Read more →</a>
+      </div>
+    </section>
+    
+    <section id="about" class="panel content-section about-me">
+      <h2>about me</h2>
+      <p>hi! i recently graduated uc berkeley with a computer science degree, now working as a software engineer at <a href="https://www.atlassian.com/">atlassian</a>.</p>
+      <p>connect with me:</p>
+      <li>
+        <a href="https://linkedin.com/in/tiffanysun17" target="_blank" rel="noopener noreferrer">linkedin</a>
+      </li>
+      <li>
+        <a href="https://github.com/tiffanysun1" target="_blank" rel="noopener noreferrer">github</a>
+      </li>
+      <li>
+        <a href="https://twitter.com/tiffnami" target="_blank" rel="noopener noreferrer">twitter</a>
+      </li>
+    </section>
+
+    <section id="projects" class="panel content-section">
+      <h2>projects</h2>
+      <br />
+      <h3>chibify</h3>
+      <p>an app that converts your photo into your chibi version</p>
+      <div class="embeds-container">
+        <!-- Twitter/X Embed -->
+        <div class="embed-item">
+          <div class="twitter-wrapper">
+            <blockquote class="twitter-tweet">
+              <p lang="en" dir="ltr"><a href="https://twitter.com/tiffnami/status/1808036557598908688?ref_src=twsrc%5Etfw">June 29, 2024</a></p>&mdash; tiffany (@tiffnami) <a href="https://twitter.com/tiffnami/status/1808036557598908688?ref_src=twsrc%5Etfw">June 29, 2024</a>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+      <br />
+      <h3>aiart</h3>
+      <p>a space to train art styles and generate art</p>
+      <div class="embeds-container">
+        <div class="embed-item">
+          <div class="embed-wrapper">
+            <iframe
+              src="https://www.loom.com/embed/dbb2dbe3f81d4554a2acba00266c9531?sid=255d6d3d-605d-4f61-9c3c-609b86c92e63"
+              frameborder="0"
+              webkitallowfullscreen
+              mozallowfullscreen
+              allowfullscreen
+            >
+            </iframe>
+          </div>
+        </div>
+      </div>
+      <br />
+      <h3>autochapter</h3>
+      <p>automatically chapter lecture videos, generate chapter summaries, and search for specific chapters</p>
+      <div class="embeds-container">
+        <div class="embed-item">
+          <div class="embed-wrapper">
+            <img src="/autochapter.png" alt="Autochapter project screenshot" style="width:100%; height:100%; object-fit:contain; position:absolute;" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="art" class="panel content-section">
+      <h2>art</h2>
+      <p>some of my art</p>
+      <div class="art-gallery">
+        <div class="art-item">
+          <div class="art-wrapper">
+            <img src="/honey.jpg" alt="Honey artwork" class="protected-image" />
+            <div class="image-overlay"></div>
+          </div>
+          <p class="art-title">honey</p>
+        </div>
+        <div class="art-item">
+          <div class="art-wrapper">
+            <img src="/traffic.jpg" alt="Traffic artwork" class="protected-image" />
+            <div class="image-overlay"></div>
+          </div>
+          <p class="art-title">traffic</p>
+        </div>
+      </div>
+    </section>
+    <br />
+  </main>
+</Layout>

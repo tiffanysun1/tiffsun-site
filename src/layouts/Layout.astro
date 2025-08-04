@@ -1,0 +1,85 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Tiffany Sun - Software Engineer" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- header background for scrolled state -->
+    <div class="header-bg"></div>
+
+    <!-- white overlay to hide content below hero initially -->
+    <div class="content-overlay"></div>
+
+    <!-- nav -->
+    <nav class="nav-links">
+      <a href="/blog">blog</a>
+      <a href="/#about">about</a>
+      <a href="/#projects">projects</a>
+      <a href="/#art">art</a>
+    </nav>
+
+    <slot />
+
+    <script>
+      /* toggle state once hero leaves viewport */
+      const hero = document.getElementById('hero');
+      if (hero) {
+        const observer = new IntersectionObserver(
+          ([e]) => document.body.classList.toggle('scrolled', !e.isIntersecting),
+          { threshold: 1 }
+        );
+        observer.observe(hero);
+      } else {
+        // If no hero (like on blog page), always show scrolled state
+        document.body.classList.add('scrolled');
+      }
+
+      /* smooth scrolling only for anchor links (starting with #) */
+      document.querySelectorAll('a[href^="#"]').forEach((a) =>
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        })
+      );
+
+      /* manually trigger twitter widget loading after page loads */
+      window.addEventListener('load', () => {
+        if (window.twttr && window.twttr.widgets) {
+          window.twttr.widgets.load();
+        }
+      });
+
+      /* disable right-click and other context menus on art images */
+      document.querySelectorAll('.art-wrapper').forEach((wrapper) => {
+        wrapper.addEventListener('contextmenu', (e) => e.preventDefault());
+        wrapper.addEventListener('dragstart', (e) => e.preventDefault());
+        wrapper.addEventListener('selectstart', (e) => e.preventDefault());
+      });
+    </script>
+
+    <!-- Twitter widgets script -->
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </body>
+</html>
