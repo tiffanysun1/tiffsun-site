@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 export interface Props {
   title: string;
   description?: string;
@@ -19,7 +21,6 @@ const { title, description = "Tiffany Sun - Software Engineer" } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/style.css" />
     <title>{title}</title>
   </head>
   <body>

@@ -1,10 +1,4 @@
-/node_modules
-/dist
-/public
-/astro-site
-/blogpost.txt
-/blog1.txt
-/blog2.txt
-/blog3.txt
-/blog4.txt
-/blog5.txt
+node_modules
+dist
+.astro
+.DS_Store
