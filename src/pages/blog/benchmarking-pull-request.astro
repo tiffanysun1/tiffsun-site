@@ -1,0 +1,208 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Benchmarking Pull Request Code Reviews - Tiffany Sun" description="A benchmark study testing 5 major AI models on real pull request decisions from open-source projects">
+  <!-- Keep the tiffany sun link at the top -->
+  <div class="intro-text" style="position: fixed; top: 1.5rem; left: 2rem; z-index: 20; transform: none; font-size: 2rem;">
+    <a href="/" style="text-decoration: none; color: inherit;">tiffany sun</a>
+  </div>
+
+  <div class="blog-layout">
+    <main class="blog-content">
+      <article class="blog-post">
+        <nav class="breadcrumb">
+          <a href="/blog">← Back to all posts</a>
+        </nav>
+        
+        <h1>Benchmarking Pull Request Code Reviews</h1>
+        <div class="blog-date">August 3, 2025</div>
+        
+        <p><strong>Fix the bug, run the commands, approve the change.</strong><br>
+        SWE-Bench measures the first, Terminal-Bench the second, but we still lack a standard benchmark for the third.</p>
+        
+        <p>So I built a lightweight benchmark to test 5 major AI models on real pull request decisions from major open-source projects like Kubernetes and VS Code, with real outcomes.</p>
+        
+        <p>Due to cost constraints, the setup was intentionally simple:</p>
+        <ul>
+          <li>20 real PRs (10 approve, 10 reject)</li>
+          <li>5 AI agents/models: Claude Code, Codex CLI (o3-mini), OpenCode (o3), AMP (o4-mini), and Gemini CLI</li>
+          <li>Approve or Reject</li>
+          <li>Same evaluation criteria for everyone</li>
+        </ul>
+        
+        <h2>Results</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Overall Accuracy</th>
+              <th>Approval Rate</th>
+              <th>Quality Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>OpenCode</td><td>70%</td><td>80%</td><td>0.89</td></tr>
+            <tr><td>Codex CLI</td><td>60%</td><td>90%</td><td>0.64</td></tr>
+            <tr><td>Gemini CLI</td><td>60%</td><td>50%</td><td>0.83</td></tr>
+            <tr><td>Claude Code</td><td>60%</td><td>90%</td><td>0.68</td></tr>
+            <tr><td>AMP</td><td>55%</td><td>85%</td><td>0.71</td></tr>
+          </tbody>
+        </table>
+        
+        <p>The overlapping pattern was that most models were way too nice. CodexCLI and Claude Code approved 90% of PRs, including the ones that were clearly incomplete or problematic.</p>
+        
+        <p>Here are the false positive rates:</p>
+        <p>CodexCLI, Claude Code, AMP: 80%<br>
+        OpenCode: 60%<br>
+        Gemini CLI: 60%</p>
+        
+        <p>Only Gemini CLI achieved a balanced 50% approval rate, closest to the ground truth distribution. It was also the only one that wrongly rejected good PRs (40% false negative rate).</p>
+        
+        <h2>What This Means</h2>
+        
+        <p>Most of the AI Models are "Yes Men". They are conflict-averse reviewers who would rather say yes than risk blocking a good change. If you're using AI for code review, weight their rejections more heavily than approvals.</p>
+        
+        <p>OpenCode wins here, but not just because of accuracy:</p>
+        <ul>
+          <li>Highest accuracy (70%) AND highest quality reasoning (0.89/1.0)</li>
+          <li>Provided specific technical analysis: "This PR improves code consistency by using native pyarrow grouped aggregation functions..."</li>
+          <li>Referenced actual PR content and implementation details</li>
+        </ul>
+        
+        <p>Compare that to CodexCLI's typical response: "The changes look good and address the issue effectively."</p>
+        
+        <p>Gemini CLI showed the most balanced judgment but sometimes got bogged down in edge cases that didn't matter.</p>
+        
+        <h2>Dataset Issues:</h2>
+        <ul>
+          <li>PR #2: Kubernetes docs fix that added an unnecessary "ACKNOWLEGEMENT" section with typos</li>
+          <li>PR #4: VS Code readonly files feature—complex implementation, mixed reviews</li>
+          <li>PR #15: Rust doctest optimization—significant performance improvement but breaking change concerns</li>
+        </ul>
+        
+        <p>With only 20 examples, each mistake carries huge weight (5% accuracy hit). The models might perform differently on:</p>
+        <ul>
+          <li>Different project types (web vs systems vs data)</li>
+          <li>Larger codebases with more context</li>
+          <li>PRs with CI/CD results and test outputs</li>
+        </ul>
+        
+        <h2>Agent vs Model</h2>
+        
+        <p>Here's something important I realized: I was testing raw language models, not coding agents. What I actually tested was models getting a text prompt with PR info. They didn't have the ability to:</p>
+        <ul>
+          <li>run code or tests</li>
+          <li>browse the repo or docs</li>
+          <li>view CI/CD results or commit history</li>
+        </ul>
+        
+        <p>A real coding agent should be able to do all of that, iterate on its work, and ask clarifying questions. This explains some of the approval bias. Without being able to verify claims, models default to trusting the PR author.</p>
+        
+        <h2>What's Next?</h2>
+        
+        <p>To really understand AI code review capabilities, we need more including but not limited to:</p>
+        <ul>
+          <li>a larger dataset across different language/project types</li>
+          <li>real agent testing</li>
+          <li>better prompt engineering</li>
+          <li>few-shot examples of good reviews</li>
+        </ul>
+        
+        <p>An interesting problem to consider is how to customize a coding agent to review code in the style and taste of a specific organization/codebase. A possible approach is to generate synthetic training data from historical PRs and reviews instead of curating by hand. In general, figuring out how to automate gathering PRs and review comments is also another next step.</p>
+        
+        <p>If you'd like to dive deeper or explore the data and code behind my study, you can visit my full <a href="https://github.com/tiffanysun1/pr-agents-benchmark" target="_blank" rel="noopener noreferrer">repository</a>.</p>
+      
+        
+        <h2>Related Work:</h2>
+        
+        <p>There's also related work like <a href="https://github.com/mrconter1/PullRequestBenchmark" target="_blank" rel="noopener noreferrer">PullRequestBenchmark</a>, which focuses specifically on binary approve/reject decisions.</p>
+      </article>
+    </main>
+  </div>
+</Layout>
+
+<style>
+  .blog-layout {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 2rem 2rem 2rem;
+  }
+
+  .breadcrumb {
+    margin-bottom: 2rem;
+  }
+
+  .breadcrumb a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .breadcrumb a:hover {
+    color: #333;
+  }
+
+  .blog-post h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .blog-post h2 {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem 0;
+    color: #333;
+  }
+
+  .blog-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .blog-post {
+    line-height: 1.6;
+  }
+
+  .blog-post p {
+    margin-bottom: 1rem;
+  }
+
+  .blog-post ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+  }
+
+  .blog-post li {
+    margin-bottom: 0.5rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .blog-layout {
+      padding: 5rem 1rem 2rem 1rem;
+    }
+
+    .blog-post h1 {
+      font-size: 2rem;
+    }
+  }
+</style>

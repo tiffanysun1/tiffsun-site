@@ -1,5 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const blogPosts = [
+  {
+    title: "Benchmarking Pull Request Code Reviews",
+    slug: "benchmarking-pull-request",
+    date: "August 3, 2025",
+    excerpt: "I built a lightweight benchmark to test 5 major AI models on real pull request decisions from major open-source projects like Kubernetes and VS Code. Most models turned out to be \"Yes Men\" - approving 80-90% of PRs including problematic ones."
+  }
+];
 ---
 
 <Layout title="Blog - Tiffany Sun" description="Tiffany Sun's blog posts about software engineering and AI">
@@ -8,252 +17,76 @@ import Layout from '../layouts/Layout.astro';
     <a href="/" style="text-decoration: none; color: inherit;">tiffany sun</a>
   </div>
 
-  <div class="blog-layout">
-    <main class="blog-content">
-      <article class="blog-post">
-        <h3>Benchmarking Pull Request Code Reviews</h3>
-        <div class="blog-date">August 3, 2025</div>
-        
-        <p><strong>Fix the bug, run the commands, approve the change.</strong><br>
-        SWE-Bench measures the first, Terminal-Bench the second, but we still lack a standard benchmark for the third.</p>
-        
-        <p>So I built a lightweight benchmark to test 5 major AI models on real pull request decisions from major open-source projects like Kubernetes and VS Code, with real outcomes.</p>
-        
-        <p>Due to cost constraints, the setup was intentionally simple:</p>
-        <ul>
-          <li>20 real PRs (10 approve, 10 reject)</li>
-          <li>5 AI agents/models: Claude Code, Codex CLI (o3-mini), OpenCode (o3), AMP (o4-mini), and Gemini CLI</li>
-          <li>Approve or Reject</li>
-          <li>Same evaluation criteria for everyone</li>
-        </ul>
-        
-        <h4>Results</h4>
-        <table>
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Overall Accuracy</th>
-              <th>Approval Rate</th>
-              <th>Quality Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>OpenCode</td><td>70%</td><td>80%</td><td>0.89</td></tr>
-            <tr><td>Codex CLI</td><td>60%</td><td>90%</td><td>0.64</td></tr>
-            <tr><td>Gemini CLI</td><td>60%</td><td>50%</td><td>0.83</td></tr>
-            <tr><td>Claude Code</td><td>60%</td><td>90%</td><td>0.68</td></tr>
-            <tr><td>AMP</td><td>55%</td><td>85%</td><td>0.71</td></tr>
-          </tbody>
-        </table>
-        
-        <p>The overlapping pattern was that most models were way too nice. CodexCLI and Claude Code approved 90% of PRs, including the ones that were clearly incomplete or problematic.</p>
-        
-        <p>Here are the false positive rates:</p>
-        <p>CodexCLI, Claude Code, AMP: 80%<br>
-        OpenCode: 60%<br>
-        Gemini CLI: 60%</p>
-        
-        <p>Only Gemini CLI achieved a balanced 50% approval rate, closest to the ground truth distribution. It was also the only one that wrongly rejected good PRs (40% false negative rate).</p>
-        
-        <h4>What This Means</h4>
-        
-        <p>Most of the AI Models are "Yes Men". They are conflict-averse reviewers who would rather say yes than risk blocking a good change. If you're using AI for code review, weight their rejections more heavily than approvals.</p>
-        
-        <p>OpenCode wins here, but not just because of accuracy:</p>
-        <ul>
-          <li>Highest accuracy (70%) AND highest quality reasoning (0.89/1.0)</li>
-          <li>Provided specific technical analysis: "This PR improves code consistency by using native pyarrow grouped aggregation functions..."</li>
-          <li>Referenced actual PR content and implementation details</li>
-        </ul>
-        
-        <p>Compare that to CodexCLI's typical response: "The changes look good and address the issue effectively."</p>
-        
-        <p>Gemini CLI showed the most balanced judgment but sometimes got bogged down in edge cases that didn't matter.</p>
-        
-        <h4>Dataset Issues:</h4>
-        <ul>
-          <li>PR #2: Kubernetes docs fix that added an unnecessary "ACKNOWLEGEMENT" section with typos</li>
-          <li>PR #4: VS Code readonly files feature—complex implementation, mixed reviews</li>
-          <li>PR #15: Rust doctest optimization—significant performance improvement but breaking change concerns</li>
-        </ul>
-        
-        <p>With only 20 examples, each mistake carries huge weight (5% accuracy hit). The models might perform differently on:</p>
-        <ul>
-          <li>Different project types (web vs systems vs data)</li>
-          <li>Larger codebases with more context</li>
-          <li>PRs with CI/CD results and test outputs</li>
-        </ul>
-        
-        <h4>Agent vs Model</h4>
-        
-        <p>Here's something important I realized: I was testing raw language models, not coding agents. What I actually tested was models getting a text prompt with PR info. They didn't have the ability to:</p>
-        <ul>
-          <li>run code or tests</li>
-          <li>browse the repo or docs</li>
-          <li>view CI/CD results or commit history</li>
-        </ul>
-        
-        <p>A real coding agent should be able to do all of that, iterate on its work, and ask clarifying questions. This explains some of the approval bias. Without being able to verify claims, models default to trusting the PR author.</p>
-        
-        <h4>What's Next?</h4>
-        
-        <p>To really understand AI code review capabilities, we need more including but not limited to:</p>
-        <ul>
-          <li>a larger dataset across different language/project types</li>
-          <li>real agent testing</li>
-          <li>better prompt engineering</li>
-          <li>few-shot examples of good reviews</li>
-        </ul>
-        
-        <p>An interesting problem to consider is how to customize a coding agent to review code in the style and taste of a specific organization/codebase. A possible approach is to generate synthetic training data from historical PRs and reviews instead of curating by hand. In general, figuring out how to automate gathering PRs and review comments is also another next step.</p>
-        
-        <p>If you'd like to dive deeper or explore the data and code behind my study, you can visit my full <a href="https://github.com/tiffanysun1/pr-agents-benchmark" target="_blank" rel="noopener noreferrer">repository</a>.</p>
+  <div class="blog-index-layout">
+    <main class="blog-index-content">
+      <h1>Blog</h1>
       
-        
-        <h4>Related Work:</h4>
-        
-        <p>There's also related work like <a href="https://github.com/mrconter1/PullRequestBenchmark" target="_blank" rel="noopener noreferrer">PullRequestBenchmark</a>, which focuses specifically on binary approve/reject decisions.</p>
-      </article>
-    </main>
-
-    <!-- Blog posts sidebar -->
-    <aside class="blog-sidebar">
-      <div class="sidebar-content">
-        <h4>All Posts</h4>
-        <div class="blog-list">
-          <div class="blog-list-item active">
-            <h5>AI Code Review Benchmark</h5>
-            <div class="blog-date-small">August 3, 2025</div>
-          </div>
-          <!-- Future blog posts would go here -->
-        </div>
+      <div class="blog-posts">
+        {blogPosts.map(post => (
+          <article class="blog-post-preview">
+            <h2><a href={`/blog/${post.slug}`}>{post.title}</a></h2>
+            <div class="blog-date">{post.date}</div>
+            <p class="blog-excerpt">{post.excerpt}</p>
+            <a href={`/blog/${post.slug}`} class="read-more">Read more →</a>
+          </article>
+        ))}
       </div>
-    </aside>
+    </main>
   </div>
 </Layout>
 
 <style>
-  /* Blog layout with sidebar */
-  .blog-layout {
-    display: flex;
-    max-width: 1200px;
+  .blog-index-layout {
+    max-width: 800px;
     margin: 0 auto;
-    padding: 6rem 4rem 2rem 2rem;
-    gap: 10rem;
-    justify-content: space-between;
+    padding: 6rem 2rem 2rem 2rem;
   }
 
-  .blog-content {
-    flex: 1;
-    min-width: 0; /* Prevents flex items from overflowing */
-  }
-
-  .blog-sidebar {
-    width: 280px;
-    flex-shrink: 0;
-  }
-
-  .sidebar-content {
-    position: sticky;
-    top: 6rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 1.5rem;
-    border: 1px solid #e9ecef;
-  }
-
-  .sidebar-content h4 {
-    font-size: 1.2rem;
+  .blog-index-content h1 {
+    font-size: 3rem;
     margin-bottom: 1rem;
-    color: #333;
     font-weight: 600;
   }
 
-  .blog-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .blog-list-item {
-    padding: 0.75rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .blog-list-item:hover {
-    background-color: #e9ecef;
-  }
-
-  .blog-list-item.active {
-    background-color: #333;
-    color: white;
-  }
-
-  .blog-list-item h5 {
-    font-size: 0.95rem;
-    margin-bottom: 0.25rem;
-    font-weight: 500;
-    line-height: 1.3;
-  }
-
-  .blog-date-small {
-    font-size: 0.8rem;
+  .blog-description {
+    font-size: 1.1rem;
     color: #666;
+    margin-bottom: 3rem;
     font-style: italic;
   }
 
-  .blog-list-item.active .blog-date-small {
-    color: #ccc;
+  .blog-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
   }
 
-  /* Existing blog post styles */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1rem 0;
+  .blog-post-preview {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2rem;
   }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 0.5rem;
-    text-align: left;
+
+  .blog-post-preview:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
   }
-  
-  th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-  }
-  
-  .blog-post {
-    line-height: 1.6;
-  }
-  
-  .blog-post h3 {
+
+  .blog-post-preview h2 {
     font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-  
-  .blog-post h4 {
-    font-size: 1.3rem;
-    margin: 1.5rem 0 0.5rem 0;
-    color: #333;
-  }
-  
-  .blog-post p {
-    margin-bottom: 1rem;
-  }
-  
-  .blog-post ul {
-    margin: 1rem 0;
-    padding-left: 2rem;
-  }
-  
-  .blog-post li {
     margin-bottom: 0.5rem;
+    line-height: 1.3;
   }
-  
+
+  .blog-post-preview h2 a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+  }
+
+  .blog-post-preview h2 a:hover {
+    color: #666;
+  }
+
   .blog-date {
     color: #666;
     font-size: 0.9rem;
@@ -261,21 +94,34 @@ import Layout from '../layouts/Layout.astro';
     font-style: italic;
   }
 
-  /* Mobile responsiveness */
+  .blog-excerpt {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .read-more {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .read-more:hover {
+    color: #333;
+  }
+
   @media (max-width: 768px) {
-    .blog-layout {
-      flex-direction: column;
+    .blog-index-layout {
       padding: 5rem 1rem 2rem 1rem;
-      gap: 2rem;
     }
 
-    .blog-sidebar {
-      width: 100%;
-      order: -1; /* Show sidebar above content on mobile */
+    .blog-index-content h1 {
+      font-size: 2.5rem;
     }
 
-    .sidebar-content {
-      position: static;
+    .blog-post-preview h2 {
+      font-size: 1.5rem;
     }
   }
 </style>
