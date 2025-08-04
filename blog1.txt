@@ -1,0 +1,86 @@
+post #1
+
+Fix the bug, run the commands, approve the change.
+SWE-Bench measures the first, Terminal-Bench the second, but we still lack a standard benchmark for the third.
+
+So I built a lightweight benchmark to test 5 major AI models on real pull request decisions from major open-source projects like Kubernetes and VS Code, with real outcomes. 
+
+The setup was intentionally simple:
+- 20 real PRs (10 approve, 10 reject)
+- 5 AI agents/models: Claude-code, CodexCLI (o3-mini), OpenCode (o3), AMP (o4-mini), and Gemini-CLI
+- Approve or Reject
+- Same evaluation criteria for everyone
+
+Results
+| Model       | Overall Accuracy | Approval Rate | Quality Score |
+  |-------------|------------------|---------------|---------------|
+  | OpenCode    | 70%              | 80%           | 0.89          |
+  | CodexCLI    | 60%              | 90%           | 0.64          |
+  | Gemini-CLI  | 60%              | 50%           | 0.83          |
+  | Claude-Code | 60%              | 90%           | 0.68          |
+  | AMP         | 55%              | 85%           | 0.71          |
+
+The overlapping pattern was that most models were way too nice. CodexCLI and Claude-Code approved 90% of PRs, including the ones that were clearly incomplete or problematic. 
+
+Here are the false positive rates:
+
+CodexCLI, Claude-Code, AMP: 80% 
+OpenCode: 60% 
+Gemini-CLI: 60% 
+
+Only Gemini-CLI achieved a balanced 50% approval rate, closest to the ground truth distribution. It was also the only one that wrongly rejected good PRs (40% false negative rate).
+
+What This Means
+
+Most of the AI Models are “Yes Men”. They are conflict-averse reviewers who would rather say yes than risk blocking a good change. If you're using AI for code review, weight their rejections more heavily than approvals.
+
+OpenCode wins here, but not just because of accuracy:
+
+  - Highest accuracy (70%) AND highest quality reasoning (0.89/1.0)
+  - Provided specific technical analysis: "This PR improves code consistency by using native pyarrow
+  grouped aggregation functions..."
+  - Referenced actual PR content and implementation details
+
+Compare that to CodexCLI's typical response: "The changes look good and address the issue effectively."
+
+Gemini-CLI showed the most balanced judgment but sometimes got bogged down in edge cases that didn't matter.
+
+Dataset Issues:
+
+- PR #2: Kubernetes docs fix that added an unnecessary "ACKNOWLEGEMENT" section with typos
+- PR #4: VS Code readonly files feature—complex implementation, mixed reviews
+- PR #15: Rust doctest optimization—significant performance improvement but breaking change concerns
+
+With only 20 examples, each mistake carries huge weight (5% accuracy hit). The models might perform
+  differently on:
+  - Different project types (web vs systems vs data)
+  - Larger codebases with more context
+  - PRs with CI/CD results and test outputs
+
+  Agent vs Model: A Critical Distinction
+
+ Here's something important I realized: I was testing raw language models, not coding agents. What I actually tested was models getting a text prompt with PR info. They didn’t have the ability to:
+- run code or tests
+- browse the repo or docs
+- view CI/CD results or commit history
+
+A real coding agent should be able to do all of that, iterate on its work, and ask clarifying questions. This explains some of the approval bias—without being able to verify claims, models default to trusting the PR author.
+
+  What's Next?
+
+This experiment scratched the surface. To really understand AI code review capabilities, we need more including but not limited to:
+- a larger dataset across different language/project types
+- real agent testing
+- better prompt engineering
+- few-shot examples of good reviews
+
+
+Beyond benchmarks, there’s promising potential in customizing coding agents to match an organization’s specific coding standards by synthesizing targeted training data from historical PRs and reviews. This aligns closely with OpenAI’s own strategy of using AI models to improve data preparation and training processes for other AI systems, creating a self-reinforcing loop of continuous improvement (source).
+
+Related Work:
+
+There’s a related benchmark here, which attempts a similar goal but has notable limitations: it focuses primarily on simple, synthetic scenarios, missing the nuance and complexity found in real, large-scale open-source projects. My benchmark aims explicitly to capture authentic code-review dynamics.
+
+If you’d like to dive deeper or explore the data and code behind my study, you can visit my full repository:
+
+➡️ pr-agents-benchmark
