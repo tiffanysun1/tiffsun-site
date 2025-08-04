@@ -1,6 +1,6 @@
-post #1
+AI Code Review Benchmark
 
-Fix the bug, run the commands, approve the change.
+**Fix the bug, run the commands, approve the change.**
 SWE-Bench measures the first, Terminal-Bench the second, but we still lack a standard benchmark for the third.
 
 So I built a lightweight benchmark to test 5 major AI models on real pull request decisions from major open-source projects like Kubernetes and VS Code, with real outcomes. 
@@ -75,12 +75,14 @@ This experiment scratched the surface. To really understand AI code review capab
 - few-shot examples of good reviews
 
 
-Beyond benchmarks, there’s promising potential in customizing coding agents to match an organization’s specific coding standards by synthesizing targeted training data from historical PRs and reviews. This aligns closely with OpenAI’s own strategy of using AI models to improve data preparation and training processes for other AI systems, creating a self-reinforcing loop of continuous improvement (source).
-
-Related Work:
-
-There’s a related benchmark here, which attempts a similar goal but has notable limitations: it focuses primarily on simple, synthetic scenarios, missing the nuance and complexity found in real, large-scale open-source projects. My benchmark aims explicitly to capture authentic code-review dynamics.
+An interesting problem to consider is how to customize a coding agent to review code in the style and taste of a specific organization/codebase. A possible approach is to generate synthetic training data from historical PRs and reviews instead of curating by hand. 
+In general, figuring out how to automate gathering PRs and review comments is also another next step.
 
 If you’d like to dive deeper or explore the data and code behind my study, you can visit my full repository:
 
-➡️ pr-agents-benchmark
+➡️ pr-agents-benchmark (https://github.com/tiffanysun1/pr-agents-benchmark)
+
+Related Work:
+
+There’s also related work like PullRequestBenchmark (https://github.com/microsoft/PullRequestBenchmark), which focuses specifically on binary approve/reject decisions.
+
